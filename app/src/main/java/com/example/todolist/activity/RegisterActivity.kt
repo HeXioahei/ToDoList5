@@ -51,12 +51,6 @@ class RegisterActivity : AppCompatActivity() {
                             Toast.makeText(currentActivity, "注册失败", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    //code = data?.code
-//                    Log.d("code", "${data?.code}")
-//                    Log.d("RegisterActivity", "succeed")
-//                    Log.d("Register", "$data")
-//                    Log.d("rrrr", "${data?.code}")
-//                    Log.d("a", "${data?.msg}")
                 }
 
                 override fun onFailure(call: Call<BaseData>, t: Throwable) {

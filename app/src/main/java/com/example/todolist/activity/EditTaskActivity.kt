@@ -46,8 +46,6 @@ class EditTaskActivity : AppCompatActivity() {
                     val currentActivity = getCurrentActivity()
                     val back = response.body()
                     val code = back?.code
-//                    Log.d("content", "${binding.editContent.text}")
-//                    Log.d("create", "${back?.code}")
                     if (code == 200) {
                         handler.post {
                             Toast.makeText(currentActivity, "添加成功", Toast.LENGTH_SHORT).show()

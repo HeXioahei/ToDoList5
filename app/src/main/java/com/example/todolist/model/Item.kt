@@ -1,4 +1,4 @@
-package com.example.todolist.data
+package com.example.todolist.model
 
 class Item(
     val tid: Int,

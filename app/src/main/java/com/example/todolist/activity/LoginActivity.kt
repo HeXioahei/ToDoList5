@@ -51,9 +51,6 @@ class LoginActivity : AppCompatActivity() {
                     val back = response.body()
                     val token = back?.token
                     val code = back?.code
-//                    Log.d("loginPassword", "${binding.loginUsername.text}")
-//                    Log.d("loginCode", "$code")
-//                    Log.d("loginCode2", "${back?.code}")
                     if (code == 200) {
                         handler.post {
                             Toast.makeText(currentAcitivity, "登入成功", Toast.LENGTH_SHORT).show()

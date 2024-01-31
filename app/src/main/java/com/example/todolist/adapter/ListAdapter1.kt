@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.activity.TaskListActivity
 import com.example.todolist.data.BaseData
-import com.example.todolist.data.Item
+import com.example.todolist.model.Item
 import com.example.todolist.requestinterface.DeleteTaskService
 import retrofit2.Call
 import retrofit2.Callback

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.activity.TaskListActivity
 import com.example.todolist.data.BaseData
-import com.example.todolist.data.Item
+import com.example.todolist.model.Item
 import com.example.todolist.requestinterface.DeleteTaskService
 import com.example.todolist.requestinterface.UpdateTaskService
+import okhttp3.FormBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,15 +61,13 @@ class ListAdapter0 (var taskList: MutableList<Item>,
 
         holder.updateBtn.setOnClickListener {
             val appService = retrofit.create(UpdateTaskService::class.java)
-//            Log.d("id","${taskList[position].tid}")
             val id = taskList[position].tid.toString()
-            appService.updateTask(id, "Bearer $token", "1")
+            val status = FormBody.Builder().add("status", "1").build()
+            appService.updateTask(id, "Bearer $token", status)
                 .enqueue(object : Callback<BaseData> {
                 override fun onResponse(call: Call<BaseData>, response: Response<BaseData>) {
                     val back = response.body()
                     val code = back?.code
-//                    Log.d("code", "${back?.code}")
-//                    Log.d("code", "$code")
                     if (code == 200) {
                         handler.post {
                             Toast.makeText(activity, "更新成功", Toast.LENGTH_SHORT).show()
