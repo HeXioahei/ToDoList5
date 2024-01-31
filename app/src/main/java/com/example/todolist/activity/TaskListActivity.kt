@@ -3,6 +3,7 @@ package com.example.todolist.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.adapter.ListAdapter0
@@ -23,6 +24,8 @@ class TaskListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private var taskList0: MutableList<Item> = InitTaskList().initUnfinishedTaskList()
     private var taskList1: MutableList<Item> = InitTaskList().initFinishedTaskList()
+//    private lateinit var taskList0: MutableList<Item>
+//    private lateinit var taskList1: MutableList<Item>
     private var initTaskList: MutableList<Item> = InitTaskList().initList()
     private lateinit var taskListAdapter0: ListAdapter0
     private lateinit var taskListAdapter1: ListAdapter1
@@ -52,11 +55,23 @@ class TaskListActivity : AppCompatActivity() {
 
         binding.taskList.layoutManager = layoutManager
 
+//        taskListAdapter0 = ListAdapter0(taskList0, token,  this)
+//        binding.taskList.adapter = taskListAdapter0
+//
+//        binding.taskList.layoutManager = layoutManager
+
+//        if (type == 0) {
+//            initActivityWithUnfinishedList(token)
+//        } else {
+//            initActivityWithFinishedList(token)
+//        }
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://47.115.212.55:5000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val appService = retrofit.create(GetTaskInfoService::class.java)
+
         binding.unFinishedBtn.setOnClickListener {
             appService.getTaskInfo("0", "Bearer $token").enqueue(object : Callback<GetInfoData> {
                 override fun onResponse(call: Call<GetInfoData>, response: Response<GetInfoData>) {
@@ -64,6 +79,9 @@ class TaskListActivity : AppCompatActivity() {
                     val back = response.body()
                     if (back?.data != null) {
                         taskList0 = back.data.item
+                        if (back.data.total == 0) {
+                            taskList0 = InitTaskList().initUnfinishedTaskList()
+                        }
                     }
                     taskListAdapter0 = ListAdapter0(taskList0, token,  currentActivity)
                     binding.taskList.adapter = taskListAdapter0
@@ -81,6 +99,9 @@ class TaskListActivity : AppCompatActivity() {
                     val back = response.body()
                     if (back?.data != null) {
                         taskList1 = back.data.item
+                        if (back.data.total == 0) {
+                            taskList1 = InitTaskList().initFinishedTaskList()
+                        }
                     }
                     taskListAdapter1 = ListAdapter1(taskList1, token,  currentActivity)
                     binding.taskList.adapter = taskListAdapter1
@@ -90,7 +111,6 @@ class TaskListActivity : AppCompatActivity() {
                 }
             })
         }
-
 
         // 点击【添加】按钮，跳转到编辑页面，新建任务
         binding.addTaskBtn.setOnClickListener {
@@ -102,5 +122,15 @@ class TaskListActivity : AppCompatActivity() {
 
     fun Activity.getCurrentActivity(): Activity {
         return this@getCurrentActivity
+    }
+
+    fun initActivityWithUnfinishedList(token: String) {
+        taskListAdapter0 = ListAdapter0(taskList0, token,  this)
+        binding.taskList.adapter = taskListAdapter0
+    }
+
+    fun initActivityWithFinishedList(token: String) {
+        taskListAdapter1 = ListAdapter1(taskList1, token,  this)
+        binding.taskList.adapter = taskListAdapter1
     }
 }
